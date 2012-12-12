@@ -8,8 +8,8 @@
   "homepage": "https://github.com/Gozala/selfish",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gozala/selfish.git",
-    "web": "https://github.com/Gozala/selfish"
+    "url": "https://github.com/mikedeboer/selfish.git",
+    "web": "https://github.com/mikedeboer/selfish"
   },
   "bugs": {
     "url": "http://github.com/Gozala/selfish/issues/"
