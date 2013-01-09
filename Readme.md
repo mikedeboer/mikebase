@@ -5,6 +5,8 @@ well-structured code, without ever touching special `prototype` properties
 or `new`, `instanceof` operators. All this without losing track of the inheritance
 tree!
 
+This is a humble fork of the awesome http://github.com/Gozala/selfish !
+
 ## Install ##
 
     npm install mikebase
