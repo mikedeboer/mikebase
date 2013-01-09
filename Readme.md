@@ -14,7 +14,7 @@ This is a humble fork of the awesome http://github.com/Gozala/selfish !
 ## Require ##
 
     // from NodeJS:
-    require("mikebase");
+    var Base = require("mikebase").Base;
     // from the browser:
     var Base = require("!raw.github.com/mikedeboer/mikebase/master/index").Base;
 
