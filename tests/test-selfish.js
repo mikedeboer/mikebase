@@ -1,6 +1,6 @@
 /* vim:set ts=2 sw=2 sts=2 expandtab */
 /*jshint asi: true newcap: true undef: true es5: true node: true devel: true
-         forin: true */Ï
+         forin: true */
 /*global define: true */
 
 (typeof define === "undefined" ? function($) { $(require, exports, module) } : define)(function(require, exports, module, undefined) {
@@ -134,6 +134,93 @@ exports["test super"] = function(assert) {
     assert.ok(Base.isPrototypeOf(bar), "Base is prototype of Bar.new");
     assert.equal(bar.type, "bar", "bar initializer was called");
     assert.equal(bar.name, "test", "bar initializer called Foo initializer");
+};
+
+exports["test inheritance chain"] = function(assert) {
+    // Basic test (from the documentation of Base)
+    // ### Object composition ###
+
+    var HEX = Base.extend({
+       hex: function hex() {
+           return "#" + this.color;
+       }
+    });
+
+    var RGB = Base.extend({
+       red: function red() {
+           return parseInt(this.color.substr(0, 2), 16);
+       },
+       green: function green() {
+           return parseInt(this.color.substr(2, 2), 16);
+       },
+       blue: function blue() {
+           return parseInt(this.color.substr(4, 2), 16);
+       }
+    });
+
+    var CMYK = Base.extend(RGB, {
+       black: function black() {
+           var color = Math.max(Math.max(this.red(), this.green()), this.blue());
+           return (1 - color / 255).toFixed(4);
+       },
+       cyan: function cyan() {
+           var K = this.black();
+           return (((1 - this.red() / 255).toFixed(4) - K) / (1 - K)).toFixed(4);
+       },
+       magenta: function magenta() {
+           var K = this.black();
+           return (((1 - this.green() / 255).toFixed(4) - K) / (1 - K)).toFixed(4);
+       },
+       yellow: function yellow() {
+           var K = this.black();
+           return (((1 - this.blue() / 255).toFixed(4) - K) / (1 - K)).toFixed(4);
+       }
+    });
+
+    var Color = Base.extend(HEX, RGB, CMYK, {
+       initialize: function Color(color) {
+           this.color = color;
+       }
+    });
+
+    // ### Prototypal inheritance ###
+
+    var Pixel = Color.extend({
+       initialize: function Pixel(x, y, hex) {
+           Color.initialize.call(this, hex);
+           this.x = x;
+           this.y = y;
+       },
+       toString: function toString() {
+           return this.x + ":" + this.y + "@" + this.hex();
+       }
+    });
+
+    var pixel = Pixel.new(11, 23, "CC3399");
+    assert.equal(pixel.toString(), "11:23@#CC3399", "A pixel should be composed of Color, HEX, RGB and CMYK");
+
+    assert.equal(pixel.red(), 204, "A pixel should be composed of RGB");
+    assert.equal(pixel.green(), 51, "A pixel should be composed of RGB");
+    assert.equal(pixel.blue(), 153, "A pixel should be composed of RGB");
+
+    assert.equal(pixel.cyan(), 0.0000, "A pixel should be composed of CMYK");
+    assert.equal(pixel.magenta(), 0.7500, "A pixel should be composed of CMYK");
+    assert.equal(pixel.yellow(), 0.250, "A pixel should be composed of CMYK");
+
+    // an instance of Color should contain the following objects:
+    var color = Color.new("CC3399");
+    assert.ok(color.hasFeature(HEX), "Check inheritance chain for HEX"); // true
+    assert.ok(color.hasFeature(RGB), "Check inheritance chain for RGB"); // true
+    assert.ok(color.hasFeature(CMYK), "Check inheritance chain for CMYK"); // true
+    assert.ok(color.hasFeature(Color), "Check inheritance chain for Color"); // true
+    assert.ok(!color.hasFeature(Pixel), "Check inheritance chain for Pixel"); // false
+
+    // an instance of Pixel should contain the following objects:
+    var pixel = Pixel.new(11, 23, "CC3399");
+    assert.ok(pixel.hasFeature(HEX), "Check inheritance chain for HEX"); // true
+    assert.ok(pixel.hasFeature(RGB), "Check inheritance chain for RGB"); // true
+    assert.ok(pixel.hasFeature(CMYK), "Check inheritance chain for CMYK"); // true
+    assert.ok(pixel.hasFeature(Color), "Check inheritance chain for Color"); // true
 };
 
 if (module == require.main)

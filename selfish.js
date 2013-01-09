@@ -7,7 +7,15 @@
 
 "use strict";
 
+var UUID = 0;
+
 exports.Base = Object.freeze(Object.create(Object.prototype, {
+    UUID: {
+        value: UUID
+    },
+    UUIDS: {
+        value: [UUID]
+    },
     /**
      *  Base.news() -> Object
      *
@@ -70,11 +78,35 @@ exports.Base = Object.freeze(Object.create(Object.prototype, {
     merge: {
         value: function merge() {
             var descriptor = {};
+            var uuids = this.UUIDS || [this.UUID || 0];
+            var base = this.UUID = 0;
             Array.prototype.forEach.call(arguments, function(properties) {
+                if (!properties.hasOwnProperty("UUID")) {
+                    properties.UUID = base | 1 << ++UUID;
+                    if (!properties.UUIDS)
+                        properties.UUIDS = [];
+                    properties.UUIDS.push(properties.UUID);
+                }
                 Object.getOwnPropertyNames(properties).forEach(function(name) {
-                    descriptor[name] = Object.getOwnPropertyDescriptor(properties, name);
+                    if (name == "UUIDS")
+                        uuids = uuids.concat(properties[name]);
+                    else
+                        descriptor[name] = Object.getOwnPropertyDescriptor(properties, name);
                 });
             });
+            uuids.forEach(function(uuid) {
+                if (base & uuid)
+                    return;
+                base = base | uuid;
+            });
+            base = base || (base | 1 << ++UUID);
+            descriptor.UUID = {
+                value: base
+            };
+            uuids.push(base);
+            descriptor.UUIDS = {
+                value: uuids
+            };
             Object.defineProperties(this, descriptor);
             return this;
         }
@@ -167,6 +199,37 @@ exports.Base = Object.freeze(Object.create(Object.prototype, {
     extend: {
         value: function extend() {
             return Object.freeze(this.merge.apply(Object.create(this), arguments));
+        }
+    },
+    /**
+     *  Base#hasFeature(obj) -> Boolean
+     *  - obj1 (Object): check if this object is part of this object
+     *
+     *  Checks if an object was merged with this object, using Base.extend() or
+     *  Base#merge(). Each object that was merged in at least once carries a
+     *  signature in the shape of a bitflag.
+     *
+     *  ## Examples
+     *
+     *  To continue with the example provided by Base.extend():
+     *
+     *      // an instance of Color should contain the following objects:
+     *      var color = Color.new("CC3399");
+     *      color.hasFeature(HEX); // true
+     *      color.hasFeature(RGB); // true
+     *      color.hasFeature(CMYK); // true
+     *      color.hasFeature(Pixel); // false
+     *
+     *      // an instance of Pixel should contain the following objects:
+     *      var pixel = Pixel.new(11, 23, "CC3399");
+     *      pixel.hasFeature(HEX); // true
+     *      pixel.hasFeature(RGB); // true
+     *      pixel.hasFeature(CMYK); // true
+     *      pixel.hasFeature(Color); // true
+     **/
+    hasFeature: {
+        value: function hasFeature(base) {
+            return typeof base.UUID != "undefined" && this.UUIDS.indexOf(base.UUID) !== -1;
         }
     }
 }));
