@@ -7,7 +7,7 @@
 
 "use strict";
 
-var Base = require("../selfish").Base;
+var Base = require("../index").Base;
 
 exports["test .isPrototypeOf"] = function(assert) {
     assert.ok(Base.isPrototypeOf(Base.new()), "Base is a prototype of Base.new()");
