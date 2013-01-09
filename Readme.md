@@ -1,6 +1,6 @@
 # mikebase #
 
-Class-free, pure prototypal inheritance that lets write expressive,
+Class-free, pure prototypal inheritance that lets you write expressive,
 well-structured code, without ever touching special `prototype` properties
 or `new`, `instanceof` operators. All this without losing track of the inheritance
 tree!
