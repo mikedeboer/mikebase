@@ -1,31 +1,34 @@
 {
-  "name": "selfish",
-  "id": "selfish",
-  "version": "0.3.2",
-  "description": "Class-free, pure prototypal inheritance",
-  "keywords": [ "oop", "inheritance", "prototype", "class", "micro", "class-free" ],
-  "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
-  "homepage": "https://github.com/Gozala/selfish",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mikedeboer/selfish.git",
-    "web": "https://github.com/mikedeboer/selfish"
-  },
-  "bugs": {
-    "url": "http://github.com/Gozala/selfish/issues/"
-  },
-  "devDependencies": {
-    "test": ">=0.2.1"
-  },
-  "main": "./selfish.js",
-  "engines": {
-    "node": ">=0.4.0"
-  },
-  "scripts": {
-    "test": "node tests/test-selfish.js"
-  },
-  "licenses": [{
-    "type" : "MIT",
-    "url" : "http://jeditoolkit.com/LICENSE"
-  }]
+    "name": "mikebase",
+    "id": "mikebase",
+    "version": "0.0.1",
+    "description": "Class-free, pure prototypal inheritance",
+    "keywords": [ "oop", "inheritance", "prototype", "class", "micro", "class-free" ],
+    "author": "Mike de Boer <info@mikedeboer.nl> (http://www.mikedeboer.nl)",
+    "contributors": [
+        "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)"
+    ],
+    "homepage": "https://mikedeboer.github.com/mikebase",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mikedeboer/mikebase.git",
+        "web": "https://github.com/mikedeboer/mikebase"
+    },
+    "bugs": {
+        "url": "http://github.com/mikedeboer/mikebase/issues/"
+    },
+    "devDependencies": {
+        "test": ">=0.2.1"
+    },
+    "main": "./index.js",
+    "engines": {
+        "node": ">=0.4.0"
+    },
+    "scripts": {
+        "test": "node tests/test.js"
+    },
+    "licenses": [{
+        "type" : "MIT",
+        "url" : "http://www.opensource.org/licenses/mit-license.php"
+    }]
 }

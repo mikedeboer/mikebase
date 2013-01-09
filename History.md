@@ -1,4 +1,10 @@
-# Changes #
+# Changes (mikebase fork) #
+
+## 0.0.1 / 2012-01-09
+
+  - added `hasFeature()` API to inspect and check inheritance tree
+
+# Changes (selfish library) #
 
 ## 0.3.2 / 2011-12-29
 
@@ -11,7 +17,7 @@
 
 ## 0.3.0 / 2011-08-14
 
-  - Introduce `megre` method.
+  - Introduce `merge` method.
 
 ## 0.2.2 / 2011-07-03 ##
 
